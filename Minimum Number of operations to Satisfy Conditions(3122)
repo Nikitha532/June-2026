@@ -1,0 +1,31 @@
+class Solution:
+    def minimumOperations(self, grid: List[List[int]]) -> int:
+        m = len(grid)
+        n = len(grid[0])
+
+        cost = [[0] * 10 for _ in range(n)]
+
+        for col in range(n):
+            freq = [0] * 10
+
+            for row in range(m):
+                freq[grid[row][col]] += 1
+
+            for digit in range(10):
+                cost[col][digit] = m - freq[digit]
+
+        dp = [[float('inf')] * 10 for _ in range(n)]
+
+        for digit in range(10):
+            dp[0][digit] = cost[0][digit]
+
+        for col in range(1, n):
+            for digit in range(10):
+                for prev in range(10):
+                    if digit != prev:
+                        dp[col][digit] = min(
+                            dp[col][digit],
+                            dp[col - 1][prev] + cost[col][digit]
+                        )
+
+        return min(dp[-1])
