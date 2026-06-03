@@ -1,0 +1,16 @@
+class Solution:
+    def earliestFinishTime(self, landStartTime: List[int], landDuration: List[int], waterStartTime: List[int], waterDuration: List[int]) -> int:
+
+        def calc(start1, dur1, start2, dur2) :
+            min_end = float("inf")
+            for i in range(len(start1)) :
+                min_end = min(min_end, start1[i] + dur1[i])
+            
+            ans = float("inf")
+            for j in range(len(start2)) :
+                Finish = max(min_end, start2[j]) + dur2[j]
+                ans = min(ans, Finish)
+            return ans
+
+        return min(calc(landStartTime, landDuration, waterStartTime, waterDuration),
+        calc(waterStartTime, waterDuration, landStartTime, landDuration))
