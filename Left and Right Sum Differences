@@ -1,5 +1,5 @@
 class Solution:
-    def leftRigthDifference(self, nums):
+    def leftRightDifference(self, nums: List[int]) -> List[int]:
         total = sum(nums)      # total sum of array
         left_sum = 0
         ans = []
