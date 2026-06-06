@@ -1,0 +1,12 @@
+class Solution:
+    def leftRigthDifference(self, nums):
+        total = sum(nums)      # total sum of array
+        left_sum = 0
+        ans = []
+
+        for num in nums:
+            total -= num       # now total becomes right sum
+            ans.append(abs(left_sum - total))
+            left_sum += num
+
+        return ans
