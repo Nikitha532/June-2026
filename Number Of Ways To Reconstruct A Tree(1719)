@@ -1,0 +1,49 @@
+from collections import defaultdict
+
+class Solution:
+    def checkWays(self, pairs):
+        graph = defaultdict(set)
+
+        for x, y in pairs:
+            graph[x].add(y)
+            graph[y].add(x)
+
+        nodes = list(graph.keys())
+        n = len(nodes)
+
+        root = -1
+        for node in nodes:
+            if len(graph[node]) == n - 1:
+                root = node
+                break
+
+        if root == -1:
+            return 0
+
+        ans = 1
+
+        for node in nodes:
+            if node == root:
+                continue
+
+            parent = -1
+            parent_degree = float('inf')
+
+            for nei in graph[node]:
+                if len(graph[nei]) >= len(graph[node]) and len(graph[nei]) < parent_degree:
+                    parent = nei
+                    parent_degree = len(graph[nei])
+
+            if parent == -1:
+                return 0
+
+            for nei in graph[node]:
+                if nei == parent:
+                    continue
+                if nei not in graph[parent]:
+                    return 0
+
+            if len(graph[parent]) == len(graph[node]):
+                ans = 2
+
+        return ans
