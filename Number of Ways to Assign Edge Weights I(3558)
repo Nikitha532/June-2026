@@ -1,0 +1,26 @@
+from collections import defaultdict
+class Solution:
+    def assignEdgeWeights(self, edges: List[List[int]]) -> int:
+
+        MOD = 10**9 + 7
+
+        graph = defaultdict(list)
+
+        for u, v in edges:
+            graph[u].append(v)
+            graph[v].append(u)
+
+        max_depth = 0
+
+        def dfs(node, parent, depth):
+            nonlocal max_depth
+
+            max_depth = max(max_depth, depth)
+
+            for nei in graph[node]:
+                if nei != parent:
+                    dfs(nei, node, depth + 1)
+
+        dfs(1, 0, 0)
+
+        return pow(2, max_depth - 1, MOD)
