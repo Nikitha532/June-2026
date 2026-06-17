@@ -1,0 +1,17 @@
+class Solution:
+    def processStr(self, s: str, k: int) -> str:
+        result = ""
+        for i in range(len(s)) :
+            if s[i].islower() :
+                result = result + s[i]
+            elif s[i] == '*' :
+                result = result[:-1]
+            elif s[i] == '#' :
+                result = result + result
+            elif s[i] == '%' :
+                result = result[::-1]
+            
+        if result :
+            return result[k]
+        else :
+            return '.'
