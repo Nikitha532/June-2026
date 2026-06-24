@@ -1,0 +1,89 @@
+class Solution:
+    MOD = 10**9 + 7
+
+    def mul(self, A, B):
+        n = len(A)
+        C = [[0] * n for _ in range(n)]
+
+        for i in range(n):
+            for k in range(n):
+                if A[i][k] == 0:
+                    continue
+                aik = A[i][k]
+
+                for j in range(n):
+                    if B[k][j]:
+                        C[i][j] = (C[i][j] + aik * B[k][j]) % self.MOD
+
+        return C
+
+    def power(self, M, p):
+        n = len(M)
+        R = [[0] * n for _ in range(n)]
+
+        for i in range(n):
+            R[i][i] = 1
+
+        while p:
+            if p & 1:
+                R = self.mul(R, M)
+
+            M = self.mul(M, M)
+            p >>= 1
+
+        return R
+
+    def mat_vec(self, M, v):
+        n = len(M)
+        res = [0] * n
+
+        for i in range(n):
+            s = 0
+            row = M[i]
+
+            for j in range(n):
+                if row[j]:
+                    s = (s + row[j] * v[j]) % self.MOD
+
+            res[i] = s
+
+        return res
+
+    def zigZagArrays(self, n: int, l: int, r: int) -> int:
+        m = r - l + 1
+
+        if m <= 1:
+            return 0
+
+        if n == 1:
+            return m
+
+        N = 2 * m
+
+        # State for length 2
+        init = [0] * N
+
+        for v in range(m):
+            init[v] = v              # up
+            init[m + v] = m - 1 - v # down
+
+        if n == 2:
+            return sum(init) % self.MOD
+
+        T = [[0] * N for _ in range(N)]
+
+        # up'[v] = sum down[x], x < v
+        for v in range(m):
+            for x in range(v):
+                T[v][m + x] = 1
+
+        # down'[v] = sum up[x], x > v
+        for v in range(m):
+            for x in range(v + 1, m):
+                T[m + v][x] = 1
+
+        P = self.power(T, n - 2)
+
+        final_state = self.mat_vec(P, init)
+
+        return sum(final_state) % self.MOD
