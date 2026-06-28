@@ -1,0 +1,8 @@
+class Solution:
+    def topKFrequent(self, nums: List[int], k: int) -> List[int]:
+        freq = Counter(nums)
+        arr = sorted(freq.items(), key=lambda x:x[1], reverse = True)
+        ans = []
+        for nums, count in arr[:k] :
+            ans.append(nums)
+        return ans
